@@ -1,6 +1,7 @@
 'use strict';
 
 const { Schema, model, default: mongoose } = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const DOCUMENT_NAME = 'User';
 const COLLECTION_NAME = 'Users';
@@ -8,7 +9,7 @@ const COLLECTION_NAME = 'Users';
 // Declare the Schema of the Mongo model
 const userSchema = new Schema(
 	{
-		name: {
+		username: {
 			type: String,
 		},
 		email: {
@@ -21,10 +22,6 @@ const userSchema = new Schema(
 		},
 		password: {
 			type: String,
-			min: [3, 'Password least character is 6'],
-			max: [20, 'Password maximum character is 20'],
-			select: false,
-			required: true,
 		},
 		role: {
 			type: String,
@@ -55,12 +52,9 @@ const userSchema = new Schema(
 		},
 
 		passwordChangeAt: {
-			type: String,
+			type: Date,
 		},
 		passwordResetToken: {
-			type: String,
-		},
-		passwordResetExpires: {
 			type: String,
 		},
 	},
@@ -70,5 +64,16 @@ const userSchema = new Schema(
 	},
 );
 
+userSchema.pre('save', async function (next) {
+	if (!this.isModified('password')) {
+		next();
+	}
+	const salt = bcrypt.genSaltSync(10);
+	this.password = bcrypt.hashSync(this.password, salt);
+});
+
+userSchema.methods.isCorrectPassword = function (password) {
+	return bcrypt.compare(password, this.password);
+};
 //Export the model
 module.exports = model(DOCUMENT_NAME, userSchema);
