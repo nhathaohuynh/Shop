@@ -4,7 +4,7 @@ const {
 	CreatedResponse,
 	OkResponse,
 } = require('../middlewares/success.response');
-const RatingService = require('../services/products/rating');
+const RatingService = require('../services/rating');
 
 class RatingController {
 	async createRating(req, res, next) {

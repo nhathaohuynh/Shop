@@ -1,14 +1,13 @@
 'use strict';
 
 const express = require('express');
-const productCategoryController = require('../../controllers/blogCategory.controller');
+const productCategoryController = require('../../controllers/productCategory.controller');
 const router = express.Router();
 const asyncHandler = require('express-async-handler');
 const { verifyToken } = require('../../middlewares/verifyToken');
 
 router.get(
 	'/product-category',
-	verifyToken,
 	asyncHandler(productCategoryController.getCategories),
 );
 

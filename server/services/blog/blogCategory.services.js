@@ -39,7 +39,6 @@ class BlogCategoryService {
 	}
 
 	async deleteCategory(bid) {
-		console.log(bid);
 		const foundBlogCategory = await blogCategoryModel.findById(bid);
 		if (!foundBlogCategory)
 			throw new BadRequest('Cannot delete blog category not existing');

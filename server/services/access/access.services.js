@@ -15,12 +15,12 @@ const EXPIRES_ATK = '3d';
 const EXPIRES_FTK = '1h';
 
 class AccessServices {
-	async signUp({ email, password, username }) {
+	async signUp({ email, password, username, role }) {
 		// check email exist
 		const foundUser = await findUserByEmail(email);
 		if (foundUser) throw new BadRequest('Email address already exist');
 		//
-		const newUser = await userModel.create({ email, password, username });
+		const newUser = await userModel.create({ email, password, username, role });
 		if (!newUser) throw new BadRequest('Something went wrong');
 
 		return {
@@ -67,7 +67,7 @@ class AccessServices {
 		const foundUser = await userModel.findById(id);
 
 		return {
-			user: selectFileds(foundUser, ['email', 'username', '_id']),
+			user: selectFields(foundUser, ['email', 'username', '_id']),
 		};
 	}
 	async refreshToken({ _id, role }) {

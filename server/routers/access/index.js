@@ -20,20 +20,20 @@ const {
 const { isAdmin } = require('../../middlewares/checkAuthorization');
 
 router.post(
-	'/shop/register',
+	'/user/register',
 	validator.body(signUpSchema),
 	asyncHandler(AccessController.signUp),
 );
 router.post(
-	'/shop/login',
+	'/user/login',
 	validator.body(loginSchema),
 	asyncHandler(AccessController.login),
 );
 
-router.get('/shop', verifyToken, asyncHandler(AccessController.getUser));
+router.get('/user', verifyToken, asyncHandler(AccessController.getUser));
 
 router.post(
-	'shop/refresh-token',
+	'user/refresh-token',
 	verifyRefreshToken,
 	asyncHandler(AccessController.refreshToken),
 );
@@ -41,35 +41,35 @@ router.post(
 router.post('/shop/logout', verifyToken, asyncHandler(AccessController.logout));
 
 router.post(
-	'/shop/change-password',
+	'/user/change-password',
 	verifyToken,
 	asyncHandler(AccessController.changePassword),
 );
 router.post(
-	'/shop/forgot-password',
+	'/user/forgot-password',
 	validator.body(forgotPasswordSchema),
 	asyncHandler(AccessController.forgotPassword),
 );
 
 router.get(
-	'/shop/forgot-password/:forgot_token',
+	'/user/forgot-password/:forgot_token',
 	verifyForgotToken,
 	asyncHandler(AccessController.comfirmPassword),
 );
 
 router.get(
-	'/shops',
+	'/users',
 	[verifyToken, isAdmin],
 	asyncHandler(AccessController.getUsers),
 );
 router.delete(
-	'/shop/:id',
+	'/user/:id',
 	[verifyToken, isAdmin],
 	asyncHandler(AccessController.removeUser),
 );
-router.patch('/shop', verifyToken, asyncHandler(AccessController.updateUser));
+router.patch('/user', verifyToken, asyncHandler(AccessController.updateUser));
 router.patch(
-	'/shop/:id',
+	'/user/:id',
 	[verifyToken, isAdmin],
 	asyncHandler(AccessController.updateUserByAdmin),
 );

@@ -4,6 +4,7 @@ const { default: helmet } = require('helmet');
 const morgan = require('morgan');
 const { notFound, errorHandler } = require('./middlewares/notFound.js');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 require('dotenv').config();
 const app = express();
 
@@ -16,7 +17,13 @@ app.use(morgan('dev'));
 app.use(helmet());
 app.use(compression());
 app.use(cookieParser());
-
+app.use(
+	cors({
+		origin: process.env.CLIENT_URL,
+		methods: ['POST', 'GET', 'PATCH', 'PUT', 'DELETE'],
+		allowedHeaders: '*',
+	}),
+);
 // init db
 require('./db/init.mongoose.js');
 

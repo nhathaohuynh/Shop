@@ -1,7 +1,7 @@
 'use strict';
 
 const { roundedNumber } = require('../../utils');
-const productModel = require('../products/product.model');
+const productModel = require('../product/product.model');
 
 class ProductRes {
 	async findProductById(pid) {

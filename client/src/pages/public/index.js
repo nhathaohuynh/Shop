@@ -1,0 +1,9 @@
+export { default as Home } from './Home';
+export { default as Login } from './Login';
+export { default as User } from './User';
+export { default as Product } from './Product';
+export { default as DetailProduct } from './DetailProduct';
+export { default as FAQ } from './FAQ';
+export { default as Blog } from './Blog';
+export { default as Service } from './Service';
+export { default as Contact } from './Contact';
