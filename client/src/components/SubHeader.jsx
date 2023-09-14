@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import path from '../utils/path';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCurrentUser } from '../redux/actions/userAction';
+import icons from '../utils/icon';
 
 function SubHeader() {
+	const dispatch = useDispatch();
+	const { isLogin, currentUser } = useSelector((state) => state.user);
+	useEffect(() => {
+		if (isLogin) dispatch(getCurrentUser());
+	}, [dispatch]);
+
+	console.log(currentUser);
 	return (
 		<div className='h-[50px] w-full bg-main flex justify-center items-center'>
 			<div className='w-main flex justify-between items-center text-white text-sm gap-20'>
-				<div className='flex items-center'>
+				<div className='flex items-center text-[12px]'>
 					<span>ORDER ONLINE OR CALL US (+8400) 300 8808</span>
 					<span className='bg-[rgba(255,255,255,0.3)] w-[1px] h-[16px] inline-block mx-2'></span>
 					<span>VND</span>
 				</div>
-
 				<div className='flex-1'>
 					<label
 						htmlFor='default-search'
@@ -20,27 +29,10 @@ function SubHeader() {
 						Search
 					</label>
 					<div className='relative'>
-						<div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
-							<svg
-								className='w-4 h-4 text-gray-700'
-								aria-hidden='true'
-								xmlns='http://www.w3.org/2000/svg'
-								fill='none'
-								viewBox='0 0 20 20'
-							>
-								<path
-									stroke='currentColor'
-									strokeLinecap='round'
-									strokeLinejoin='round'
-									strokeWidth={2}
-									d='m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z'
-								/>
-							</svg>
-						</div>
 						<input
 							type='search'
-							id='default-search'
-							className='block w-full p-3 pl-10 text-xs outline-none bg-white placeholder-gray-700 text-gray-700'
+							id='search-input'
+							className='block w-full p-2.5 pl-3 text-xs outline-none bg-white placeholder-gray-700 text-gray-700'
 							placeholder='Search products ...'
 							required
 							spellCheck='false'
@@ -53,10 +45,30 @@ function SubHeader() {
 						</button>
 					</div>
 				</div>
-
-				<div className=''>
-					<Link to={path.LOGIN}>Sign In or Create Account</Link>
-				</div>
+				{currentUser ? (
+					<div className='flex items-center gap-2'>
+						<span className='text-[12px]'>
+							Welcome! {currentUser?.username}
+						</span>
+						<icons.AiOutlineLogout size={16} className='hover:cursor-pointer' />
+					</div>
+				) : (
+					<div>
+						<Link
+							className='hover:underline hover:text-gray-100'
+							to={path.LOGIN}
+						>
+							Sign In
+						</Link>
+						<span className='bg-[rgba(255,255,255,0.3)] w-[1px] h-[16px] inline-block mx-2'></span>
+						<Link
+							className='hover:underline hover:text-gray-100'
+							to={path.REGISTER}
+						>
+							Create Account
+						</Link>
+					</div>
+				)}
 			</div>
 		</div>
 	);

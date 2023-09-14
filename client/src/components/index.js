@@ -9,4 +9,5 @@ export { default as ArrivalProduct } from './ArrivalProduct';
 export { default as HotCollection } from './HotCollection';
 export { default as BlogPost } from './BlogPost';
 export { default as SubHeader } from './SubHeader';
+export { default as InputField } from './InputField';
 export { default as Footer } from './Footer';

@@ -9,16 +9,31 @@ const { addCookie, clearCookie } = require('../middlewares/cookie');
 
 class AccessController {
 	async signUp(req, res, next) {
+		const data = await AccessServices.signUp(req.body);
+		res.cookie('authen', data, {
+			httpOnly: true,
+			secure: true,
+			sameSite: 'none',
+			optionsSuccessStatus: 200,
+			maxAge: 10 * 60 * 1000,
+		});
+
 		return new CreatedResponse({
-			metaData: await AccessServices.signUp(req.body),
+			message: 'Please check your email to active account',
 		}).send(res);
+	}
+
+	async authenRegister(req, res, next) {
+		const payload = req.cookies.authen;
+		const tokenParam = req.params.token;
+		res.clearCookie('authen', { httpOnly: true, secure: true });
+		return new OkResponse({
+			metaData: await AccessServices.authenRegister(payload, tokenParam, res),
+		});
 	}
 
 	async login(req, res, next) {
 		const data = await AccessServices.login(req.body, res);
-
-		await addCookie(data?.user?.email, res);
-
 		return new OkResponse({
 			metaData: data,
 			message: 'Login successful',
@@ -26,8 +41,10 @@ class AccessController {
 	}
 
 	async getUser(req, res, next) {
+		const { refreshToken, ...data } = await AccessServices.getUser(req.body.id);
+		addCookie(data?.user?.email, res);
 		return new OkResponse({
-			metaData: await AccessServices.getUser(req.user),
+			metaData: data,
 			message: 'Get infomation User successfully',
 		}).send(res);
 	}
@@ -44,6 +61,7 @@ class AccessController {
 		const data = await AccessServices.logout(refreshToken, req.user);
 
 		clearCookie(res);
+
 		return new OkResponse({
 			metaData: data,
 			message: 'Logout successfully',
@@ -55,6 +73,7 @@ class AccessController {
 			...req.body,
 			...req.user,
 		};
+
 		return new OkResponse({
 			metaData: await AccessServices.changePassword(data),
 			message: 'Ok',
@@ -64,13 +83,13 @@ class AccessController {
 	async forgotPassword(req, res, next) {
 		return new OkResponse({
 			metaData: await AccessServices.forgotPassword(req.body),
-			message: 'Check email to receive new password',
+			message: 'Check email to authenticate new password',
 		}).send(res);
 	}
 
 	async comfirmPassword(req, res, next) {
 		return new OkResponse({
-			metaData: await AccessServices.comfirmPassword(req.infoForgot),
+			metaData: await AccessServices.comfirmPassword(req.infoUser, res),
 			message: 'Change password successfully',
 		}).send(res);
 	}

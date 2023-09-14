@@ -26,10 +26,11 @@ const Header = () => {
 				</div>
 				<div className='flex items-center justify-center px-6 border-r border-main gap-2'>
 					<icons.BsHandbagFill color='red' />
-					<span>0 item</span>
+					<span>0 Item</span>
 				</div>
-				<div className='flex items-center justify-center px-6'>
-					<icons.FaUserCircle color='red' size={24} />
+				<div className='flex items-center justify-center pl-6 gap-2'>
+					<icons.FaUserCircle color='red' size={16} />
+					<span>Profile</span>	
 				</div>
 			</div>
 		</div>

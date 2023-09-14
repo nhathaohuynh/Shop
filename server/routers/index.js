@@ -8,7 +8,6 @@ router.use('/api/v1', require('./rating'));
 router.use('/api/v1', require('./productCaterogy'));
 router.use('/api/v1', require('./blogCaterogy'));
 router.use('/api/v1', require('./brand'));
-router.use(verifyToken);
 router.use('/api/v1', require('./blog'));
 
 module.exports = router;

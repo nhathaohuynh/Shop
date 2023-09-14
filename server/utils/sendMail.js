@@ -1,7 +1,7 @@
 'use strict';
 const asyncHandler = require('express-async-handler');
 const nodemailer = require('nodemailer');
-const sendMail = asyncHandler(async ({ to: email, html }) => {
+const sendMail = asyncHandler(async ({ to: email, html, subject }) => {
 	const transporter = nodemailer.createTransport({
 		host: 'smtp.gmail.com',
 		port: 587,
@@ -15,7 +15,7 @@ const sendMail = asyncHandler(async ({ to: email, html }) => {
 	const info = await transporter.sendMail({
 		from: '"E-commerce 👻" <no-reply@ecommerce.com>', // sender address
 		to: email, // list of receivers
-		subject: 'Forgot Password ✔', // Subject line
+		subject: subject, // Subject line
 		html: html, // html body
 	});
 	return info;

@@ -14,7 +14,7 @@ const Product = ({ productData, isNew, isTrending, isDescription }) => {
 		<div className='w-full px-[10px] mb-4'>
 			<Link
 				to={`/${path.DETAIL_PRODUCTS}/${productData?._id}/${productData?.title}`}
-				className={`w-full border ${
+				className={`w-full border block ${
 					isDescription ? 'h-[485px]' : 'h-[385px]'
 				}flex flex-col items-center justify-between gap-4 hover:shadow-md transition-all`}
 				onMouseEnter={(e) => {
@@ -28,7 +28,7 @@ const Product = ({ productData, isNew, isTrending, isDescription }) => {
 			>
 				<div className='w-full p-3 relative'>
 					{isHoverImage && (
-						<div className='absolute bottom-[-10px] left-0 right-0 justify-center gap-3 flex animate-slide-top z-20'>
+						<div className='absolute bottom-[-5px] left-0 right-0 justify-center gap-3 flex animate-slide-top z-20'>
 							<Option icon={<icons.AiFillHeart size={16} />}></Option>
 							<Option icon={<icons.FiMenu size={16} />}></Option>
 							<Option icon={<icons.AiFillEye size={16} />}></Option>
@@ -55,14 +55,14 @@ const Product = ({ productData, isNew, isTrending, isDescription }) => {
 						<img
 							src={newLabel}
 							alt='new label'
-							className='absolute top-[-5px] right-[0px] w-[70px]'
+							className='absolute top-0 right-[0px] w-[70px]'
 						/>
 					) : null}
 					{isTrending ? (
 						<img
 							src={tredingLabel}
 							alt='trending label'
-							className='absolute top-[-5px] right-[0px] w-[70px]'
+							className='absolute top-0 right-[0px] w-[70px]'
 						/>
 					) : null}
 				</div>

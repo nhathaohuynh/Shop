@@ -10,7 +10,7 @@ const validator = require('express-joi-validation').createValidator({});
 const {
 	verifyToken,
 	verifyRefreshToken,
-	verifyForgotToken,
+	verifyAuthencationToken,
 } = require('../../middlewares/verifyToken');
 const {
 	signUpSchema,
@@ -24,16 +24,23 @@ router.post(
 	validator.body(signUpSchema),
 	asyncHandler(AccessController.signUp),
 );
+
+
+router.get(
+	'/user/authen-register/:token',
+	asyncHandler(AccessController.authenRegister),
+);
+
 router.post(
 	'/user/login',
 	validator.body(loginSchema),
 	asyncHandler(AccessController.login),
 );
 
-router.get('/user', verifyToken, asyncHandler(AccessController.getUser));
+router.get('/user', asyncHandler(AccessController.getUser));
 
 router.post(
-	'user/refresh-token',
+	'/user/refresh-token',
 	verifyRefreshToken,
 	asyncHandler(AccessController.refreshToken),
 );
@@ -53,7 +60,7 @@ router.post(
 
 router.get(
 	'/user/forgot-password/:forgot_token',
-	verifyForgotToken,
+	verifyAuthencationToken,
 	asyncHandler(AccessController.comfirmPassword),
 );
 

@@ -6,7 +6,17 @@ const instance = axios.create({
 // Add a request interceptor
 instance.interceptors.request.use(
 	function (config) {
-		// Do something before request is sent
+		const { token } = JSON.parse(
+			window.localStorage.getItem('persist:current-user'),
+		);
+		if (token) {
+			// console.log(token)
+			const accessToken = JSON.parse(token);
+			config.headers = {
+				authorization: 'Bearer ' + accessToken,
+			};
+			return config;
+		}
 		return config;
 	},
 	function (error) {

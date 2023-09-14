@@ -14,19 +14,19 @@ const PORT = process.env.PORT || 8080;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
-app.use(helmet());
-app.use(compression());
 app.use(cookieParser());
+// app.use(helmet());
+// app.use(compression());
+
 app.use(
 	cors({
 		origin: process.env.CLIENT_URL,
 		methods: ['POST', 'GET', 'PATCH', 'PUT', 'DELETE'],
-		allowedHeaders: '*',
+		credentials: true,
 	}),
 );
 // init db
 require('./db/init.mongoose.js');
-
 //handle error
 app.use(require('./routers'));
 app.use(notFound);

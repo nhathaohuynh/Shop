@@ -1,6 +1,7 @@
 'use strict';
 
-const { BadRequest } = require('../../middlewares/error.response');
+const { BadRequest, Forbidden } = require('../../middlewares/error.response');
+const CryptoJS = require('crypto-js');
 const {
 	findUserByEmail,
 	findUserById,
@@ -10,22 +11,71 @@ const bcrypt = require('bcrypt');
 const { generateToken } = require('../../utils/jwt');
 const userModel = require('../../models/access/user.model');
 const sendMail = require('../../utils/sendMail');
+const JWT = require('jsonwebtoken');
+const JWT_KEY = process.env.JWT_SECRET;
 const EXPIRES_RTK = '7d';
 const EXPIRES_ATK = '3d';
-const EXPIRES_FTK = '1h';
+const EXPIRES_FTK = '300s';
 
 class AccessServices {
-	async signUp({ email, password, username, role }) {
+	async signUp({ email, password, username, role }, res) {
 		// check email exist
 		const foundUser = await findUserByEmail(email);
 		if (foundUser) throw new BadRequest('Email address already exist');
 		//
-		const newUser = await userModel.create({ email, password, username, role });
-		if (!newUser) throw new BadRequest('Something went wrong');
 
-		return {
-			user: selectFields(newUser, ['email', 'username']),
+		const optionsAUTK = {
+			email,
+			username,
 		};
+		const token = generateToken(optionsAUTK, EXPIRES_FTK);
+
+		const data = {
+			email,
+			username,
+			role,
+			password: CryptoJS.AES.encrypt(password, JWT_KEY).toString(),
+		};
+
+		const html = `Please click in link to authenticate account 
+		<a href='${process.env.URL_SERVER}/api/v1/user/authen-register/${token}'>Click Here</a>`;
+
+		const options = {
+			html,
+			to: email,
+			subject: 'Authenticate acoount ✔',
+		};
+
+		sendMail(options);
+
+		return data;
+	}
+
+	async authenRegister(payload, tokenParam, res) {
+		const CLIENT = process.env.CLIENT_URL;
+		const { password, ...infoUser } = payload;
+
+		const { email } = JWT.verify(tokenParam, JWT_KEY);
+		if (!email) return res.redirect(`${CLIENT}/authen-register/failed`);
+
+		const foundUser = await findUserByEmail(email);
+
+		if (foundUser) return res.redirect(`${CLIENT}/authen-register/failed`);
+
+		if (email !== infoUser.email)
+			return res.redirect(`${CLIENT}/authen-register/failed`);
+
+		const bytes = CryptoJS.AES.decrypt(password, JWT_KEY);
+		const originalPassword = bytes.toString(CryptoJS.enc.Utf8);
+		const user = {
+			...infoUser,
+			password: originalPassword,
+		};
+
+		const newUser = await userModel.create(user);
+		if (!newUser) return res.redirect(`${CLIENT}/authen-register/failed`);
+
+		return res.redirect(301, `${CLIENT}/authen-register/success`);
 	}
 
 	async login({ email, password }, res) {
@@ -59,17 +109,18 @@ class AccessServices {
 
 		return {
 			accessToken,
-			user: selectFields(foundUser, ['username', 'email']),
+			user: selectFields(foundUser, ['username', 'email', '_id']),
 		};
 	}
 
 	async getUser({ id }) {
-		const foundUser = await userModel.findById(id);
+		const foundUser = await userModel.findById(id).select('-password');
 
 		return {
-			user: selectFields(foundUser, ['email', 'username', '_id']),
+			user: foundUser,
 		};
 	}
+
 	async refreshToken({ _id, role }) {
 		const optionsATK = {
 			id: _id,
@@ -109,8 +160,10 @@ class AccessServices {
 			{ password, passwordChangeAt: Date.now() },
 			{ new: true },
 		);
+
 		return;
 	}
+
 	async forgotPassword({ email, password: newPassword }) {
 		const foundUser = await findUserByEmail(email);
 
@@ -121,10 +174,22 @@ class AccessServices {
 			id: foundUser._id,
 			newPassword,
 		};
-		const resetToken = generateToken(optionsForgotPassword, EXPIRES_FTK);
 
-		await UserModel.findOneAndUpdate(
-			{ email },
+		const resetToken = CryptoJS.AES.encrypt(
+			JSON.stringify(optionsForgotPassword),
+			JWT_KEY,
+		).toString();
+
+		console.log(resetToken);
+		const data = {
+			id: foundUser._id,
+			email: foundUser.email,
+		};
+
+		const token = generateToken(data, EXPIRES_FTK);
+
+		await userModel.findByIdAndUpdate(
+			foundUser._id,
 			{
 				passwordResetToken: resetToken,
 			},
@@ -132,24 +197,45 @@ class AccessServices {
 		);
 
 		const html = `Please click in link to get new password 
-		<a href='${process.env.URL_SERVER}/api/shop/forgot-password/${resetToken}'>Click Here</a>`;
+		<a href='${process.env.URL_SERVER}/api/v1/user/forgot-password/${token}'>Click Here</a>`;
 
 		const options = {
 			html,
 			to: email,
+			subject: 'Forgot Password ✔',
 		};
 		sendMail(options);
 
-		return {
-			resetToken,
-		};
+		//if user not click to link server will delete automatic
+		setTimeout(async () => {
+			await userModel.findByIdAndUpdate(foundUser._id, {
+				passwordResetToken: '',
+			});
+		}, 30000);
+
+		return;
 	}
-	async comfirmPassword({ id, newPassword }) {
+
+	async comfirmPassword({ email, id }, res) {
+		const CLIENT = process.env.CLIENT_URL;
+		if (!email || !id) return res.redirect(`${CLIENT}/forgot-password/failed`);
+
 		const foundUser = await findUserById(id);
-		if (!foundUser) throw new BadRequest('Account is not existing');
+		if (!foundUser) return res.redirect(`${CLIENT}/forgot-password/failed`);
+
+		const bytes = CryptoJS.AES.decrypt(foundUser.passwordResetToken, JWT_KEY);
+		const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+		console.log(decryptedData);
+		if (decryptedData?.id !== id)
+			return res.redirect(`${CLIENT}/forgot-password/failed`);
+
+		const newPassword = decryptedData?.newPassword;
 
 		const salt = bcrypt.genSaltSync(10);
 		const password = bcrypt.hashSync(newPassword, salt);
+
+		console.log(newPassword);
 
 		await userModel.findByIdAndUpdate(
 			id,
@@ -157,7 +243,7 @@ class AccessServices {
 			{ new: true },
 		);
 
-		return;
+		return res.redirect(`${CLIENT}/forgot-password/success`);
 	}
 
 	async getUsers() {

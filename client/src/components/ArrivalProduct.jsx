@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomSlider from './CustomSlider';
 import { getArrivalProducts } from '../redux/actions/productAction';
+import Loading from './Loading';
 
 const tabs = [
 	{
@@ -22,17 +23,18 @@ function ArrivalProduct() {
 	const dispatch = useDispatch();
 	const [arrivalProducts, setArrivalProducts] = useState([]);
 	const [tab, setTab] = useState(1);
-	const products = useSelector((state) => state?.products);
+	const { arrivalProduct: products } = useSelector(
+		(state) => state?.products,
+	);
 	const optionApi = { sort: '-createdAt', limit: 9, category: 'Smartphone' };
 	useEffect(() => {
 		dispatch(getArrivalProducts(optionApi));
 	}, []);
 
 	useEffect(() => {
-		setArrivalProducts(products?.arrivalProduct);
+		setArrivalProducts(products);
 	}, [products]);
 
-	console.log(products.loading);
 	return (
 		<div className='w-full'>
 			<div className='flex justify-between items-center border-main border-b-2'>

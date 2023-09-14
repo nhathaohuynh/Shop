@@ -6,8 +6,16 @@ export default defineConfig(({ command, mode }) => {
 	const env = loadEnv(mode, process.cwd(), '');
 	return {
 		// vite config
+
 		define: {
 			'process.env.SERVER_API': JSON.stringify(env.SERVER_API),
+		},
+
+		server: {
+			port: '3000',
+			proxy: {
+				'/api': 'http://localhost:5000/',
+			},
 		},
 	};
 });

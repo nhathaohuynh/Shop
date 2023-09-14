@@ -52,30 +52,25 @@ const verifyRefreshToken = asyncHandler(async (req, res, next) => {
 	});
 });
 
-const verifyForgotToken = asyncHandler(async (req, res, next) => {
-	const forgot_token = req?.params?.forgot_token;
-	if (!forgot_token) throw new BadRequest('Please provide forgot token');
+const verifyAuthencationToken = asyncHandler(async (req, res, next) => {
+	const CLIENT = process.env.CLIENT_URL;
+	const forgot_token = req.params?.forgot_token;
+	if (!forgot_token) res.redirect(`${CLIENT}/forgot-password/failed`);
 
 	jwt.verify(forgot_token, JWT_KEY, async (err, decoded) => {
 		if (err) {
-			const message =
-				err.name === 'JsonWebTokenError' ? 'Authorization !!' : err.message;
-			return next(new BadRequest(message));
+			return res.redirect(`${CLIENT}/forgot-password/failed`);
 		}
-
+		console.log(decoded)
 		const foundUser = await findUserById(decoded.id);
-		if (!foundUser) throw new BadRequest('Account is not existing');
+		if (!foundUser) return res.redirect(`${CLIENT}/forgot-password/failed`);
 
-		const isMatchedToken = forgot_token === foundUser.passwordResetToken;
-		if (!isMatchedToken)
-			return next(new BadRequest('forgot token is not matching'));
-
-		req.infoForgot = decoded;
+		req.infoUser = decoded;
 		next();
 	});
 });
 module.exports = {
 	verifyToken,
 	verifyRefreshToken,
-	verifyForgotToken,
+	verifyAuthencationToken,
 };

@@ -36,7 +36,7 @@ const PrevArrow = (props) => {
 			className={className}
 			style={{
 				...style,
-				backgroundColor: 'rgba(255,255,255,0.5)',
+				backgroundColor: 'rgba(0,0,0,0.5)',
 				width: '40px',
 				height: '40px',
 				display: 'flex',
@@ -44,12 +44,12 @@ const PrevArrow = (props) => {
 				alignItems: 'center',
 				borderRadius: '9999px',
 				left: '20px',
-				top: '100px',
+				top: '150px',
 				zIndex: '10',
 			}}
 			onClick={onClick}
 		>
-			<icons.MdOutlineNavigateBefore size={60} color='#333' className='arrow' />
+			<icons.MdOutlineNavigateBefore size={60} color='#fff' className='arrow' />
 		</div>
 	);
 };
@@ -60,7 +60,7 @@ const NextArrow = (props) => {
 			className={className}
 			style={{
 				...style,
-				backgroundColor: 'rgba(255,255,255,0.5)',
+				backgroundColor: 'rgba(0,0,0,0.5)',
 				width: '40px',
 				height: '40px',
 				display: 'flex',
@@ -68,12 +68,12 @@ const NextArrow = (props) => {
 				alignItems: 'center',
 				borderRadius: '9999px',
 				right: '20px',
-				top: '100px',
+				top: '150px',
 				zIndex: '10',
 			}}
 			onClick={onClick}
 		>
-			<icons.MdOutlineNavigateNext size={60} color='#333' className='arrow' />
+			<icons.MdOutlineNavigateNext size={60} color='#fff' className='arrow' />
 		</div>
 	);
 };

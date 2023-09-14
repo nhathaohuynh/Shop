@@ -1,5 +1,6 @@
 export { default as Home } from './Home';
 export { default as Login } from './Login';
+export { default as Register } from './Register';
 export { default as User } from './User';
 export { default as Product } from './Product';
 export { default as DetailProduct } from './DetailProduct';
@@ -7,3 +8,5 @@ export { default as FAQ } from './FAQ';
 export { default as Blog } from './Blog';
 export { default as Service } from './Service';
 export { default as Contact } from './Contact';
+export { default as Authentication } from './Authentication';
+export { default as ForgotPassword } from './ForgotPassword';
