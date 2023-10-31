@@ -98,6 +98,9 @@ class AccessServices {
 
 		res.cookie('refreshToken', refreshToken, {
 			httpOnly: true,
+			secure: true,
+			sameSite: 'none',
+			optionsSuccessStatus: 200,
 			maxAge: 7 * 24 * 60 * 60 * 1000,
 		});
 
@@ -109,12 +112,16 @@ class AccessServices {
 
 		return {
 			accessToken,
-			user: selectFields(foundUser, ['username', 'email', '_id']),
+			user: await userModel
+				.findById(foundUser._id)
+				.select('-password -refreshToken -passwordResetToken'),
 		};
 	}
 
 	async getUser({ id }) {
-		const foundUser = await userModel.findById(id).select('-password');
+		const foundUser = await userModel
+			.findById(id)
+			.select('-password -refreshToken -passwordResetToken');
 
 		return {
 			user: foundUser,
@@ -131,17 +138,10 @@ class AccessServices {
 		};
 	}
 
-	async logout(refreshToken, { id }) {
-		if (!refreshToken) throw new BadRequest('Invalid refresh token');
-
-		const foundUser = await findUserById(id);
-		const isMatchRefreshToken = refreshToken === foundUser.refreshToken;
-
-		if (!isMatchRefreshToken) throw new BadRequest('Invalid refresh token');
-
-		await userModel.findOneAndUpdate(
-			{ refreshToken },
-			{ refreshToken: '' },
+	async logout({ _id }) {
+		await userModel.findByIdAndUpdate(
+			_id,
+			{ refreshToken: '', accessToken: '' },
 			{ new: true },
 		);
 		return;

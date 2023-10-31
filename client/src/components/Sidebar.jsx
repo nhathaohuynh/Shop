@@ -6,16 +6,6 @@ import { useSelector } from 'react-redux';
 import icons from '../utils/icon';
 import DynamicIcon from './DynamicIcon';
 
-const iconsArray = [
-	{ icon: icons.SlScreenSmartphone },
-	{ icon: icons.AiOutlineTablet },
-	{ icon: icons.AiOutlineLaptop },
-	{ icon: icons.CiSpeaker },
-	{ icon: icons.AiOutlineCamera },
-	{ icon: icons.CiHeadphones },
-	{ icon: icons.BsLaptop },
-	{ icon: icons.AiOutlinePrinter },
-];
 
 const Sidebar = () => {
 	const { categories: cateProduct } = useSelector((state) => state?.app);
@@ -26,8 +16,7 @@ const Sidebar = () => {
 				<icons.FiMenu size={24} />
 				<span>All Collections</span>
 			</div>
-			{cateProduct?.map((el, index) => {
-				const icon = iconsArray[index];
+			{cateProduct?.map((el) => {
 				return (
 					<NavLink
 						key={slug(el.title)}

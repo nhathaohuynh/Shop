@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
 	Banner,
 	BestSell,
@@ -8,12 +8,14 @@ import {
 	ArrivalProduct,
 	HotCollection,
 	BlogPost,
-} from '../../components';
+	ScrollToTop,
+} from '../../components'
 
 const Home = () => {
 	return (
-		<>
-			<div className='flex'>
+		<div className='w-main m-auto'>
+			<ScrollToTop></ScrollToTop>
+			<section className='flex mt-6'>
 				<div className='flex flex-col gap-5 w-[25%] flex-auto'>
 					<Sidebar />
 					<DealDaily />
@@ -22,21 +24,21 @@ const Home = () => {
 					<Banner />
 					<BestSell></BestSell>
 				</div>
-			</div>
-			<div className='my-8'>
+			</section>
+			<section className='my-8'>
 				<FeatureProduct />
-			</div>
-			<div className='my-8'>
+			</section>
+			<section className='my-8'>
 				<ArrivalProduct />
-			</div>
-			<div className='my-8'>
+			</section>
+			<section className='my-8'>
 				<HotCollection />
-			</div>
-			<div className='my-8'>
+			</section>
+			<section className='my-8'>
 				<BlogPost />
-			</div>
-		</>
-	);
-};
+			</section>
+		</div>
+	)
+}
 
-export default Home;
+export default Home

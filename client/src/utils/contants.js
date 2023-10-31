@@ -1,4 +1,4 @@
-import path from './path';
+import path from './path'
 
 export const navigation = [
 	{
@@ -9,7 +9,7 @@ export const navigation = [
 	{
 		id: 1,
 		name: 'Products',
-		path: `${path.PRODUCTS}`,
+		path: `/products`,
 	},
 	{
 		id: 2,
@@ -31,4 +31,4 @@ export const navigation = [
 		name: 'Contact',
 		path: `${path.CONTACTS}`,
 	},
-];
+]

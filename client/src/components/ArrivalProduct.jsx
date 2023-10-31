@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import CustomSlider from './CustomSlider';
-import { getArrivalProducts } from '../redux/actions/productAction';
-import Loading from './Loading';
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import CustomSlider from './CustomSlider'
+import { getArrivalProducts } from '../redux/actions/productAction'
+import Loading from './Loading'
 
 const tabs = [
 	{
@@ -17,29 +17,27 @@ const tabs = [
 		id: 3,
 		name: 'Laptop',
 	},
-];
+]
 
 function ArrivalProduct() {
-	const dispatch = useDispatch();
-	const [arrivalProducts, setArrivalProducts] = useState([]);
-	const [tab, setTab] = useState(1);
-	const { arrivalProduct: products } = useSelector(
-		(state) => state?.products,
-	);
-	const optionApi = { sort: '-createdAt', limit: 9, category: 'Smartphone' };
+	const dispatch = useDispatch()
+	const [arrivalProducts, setArrivalProducts] = useState([])
+	const [tab, setTab] = useState(1)
+	const { arrivalProduct: products } = useSelector((state) => state?.products)
+	const optionApi = { sort: '-createdAt', limit: 9, category: 'Smartphone' }
 	useEffect(() => {
-		dispatch(getArrivalProducts(optionApi));
-	}, []);
+		dispatch(getArrivalProducts(optionApi))
+	}, [])
 
 	useEffect(() => {
-		setArrivalProducts(products);
-	}, [products]);
+		setArrivalProducts(products)
+	}, [products])
 
 	return (
 		<div className='w-full'>
 			<div className='flex justify-between items-center border-main border-b-2'>
-				<h2 className='text-[20px] w-full font-semibold py-[15px] '>
-					FEATURED PRODUCTS
+				<h2 className='text-[20px] w-full uppercase font-semibold py-[15px] '>
+					Arrival Product
 				</h2>
 				<div className='flex gap-5 text-gray-400 font-normal'>
 					{tabs.map((el) => (
@@ -47,13 +45,13 @@ function ArrivalProduct() {
 							className={`${el.id === tab ? 'text-main' : ''} cursor-pointer`}
 							key={el.id}
 							onClick={() => {
-								setTab(el.id);
+								setTab(el.id)
 								dispatch(
 									getArrivalProducts({
 										...optionApi,
 										category: el.name,
 									}),
-								);
+								)
 							}}
 						>
 							{el.name}
@@ -69,7 +67,7 @@ function ArrivalProduct() {
 				/>
 			</div>
 		</div>
-	);
+	)
 }
 
-export default ArrivalProduct;
+export default ArrivalProduct

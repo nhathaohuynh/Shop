@@ -20,7 +20,6 @@ export const logout = createAsyncThunk(
 		if (response.code !== 1) {
 			return rejectWithValue(response);
 		}
-		console.log(response);
 		return response?.metaData;
 	},
 );

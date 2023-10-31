@@ -5,7 +5,7 @@ import path from '../utils/path';
 import React from 'react';
 const Header = () => {
 	return (
-		<div className='w-main min-h-[110px] py-9 flex justify-between'>
+		<header className='w-main min-h-[110px] py-9 flex justify-between'>
 			<Link to={`/${path.HOME}`}>
 				<img src={logo} alt='Logo' className='object-contain' />
 			</Link>
@@ -24,16 +24,16 @@ const Header = () => {
 					</span>
 					<span>Online Support 24/7</span>
 				</div>
-				<div className='flex items-center justify-center px-6 border-r border-main gap-2'>
+				<div className='flex items-center justify-center px-6 border-r hover:cursor-pointer border-main gap-2'>
 					<icons.BsHandbagFill color='red' />
 					<span>0 Item</span>
 				</div>
-				<div className='flex items-center justify-center pl-6 gap-2'>
+				<div className='flex items-center justify-center pl-6 gap-2 hover:cursor-pointer'>
 					<icons.FaUserCircle color='red' size={16} />
-					<span>Profile</span>	
+					<span>Profile</span>
 				</div>
 			</div>
-		</div>
+		</header>
 	);
 };
 

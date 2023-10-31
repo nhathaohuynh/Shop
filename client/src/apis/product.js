@@ -6,3 +6,9 @@ export const getProducts = (params) =>
 		method: 'get',
 		params,
 	});
+
+export const getProduct = (id) =>
+	instance({
+		url: `/product/${id}`,
+		method: 'get',
+	});

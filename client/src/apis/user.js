@@ -2,7 +2,7 @@ import instance from '../utils/axios.config';
 export const apiLogin = (data) => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			const response = await fetch('http://localhost:5000/api/v1//user/login', {
+			const response = await fetch('http://localhost:5000/api/v1/user/login', {
 				method: 'POST',
 				credentials: 'include',
 				headers: {
@@ -17,21 +17,21 @@ export const apiLogin = (data) => {
 	});
 };
 
-// export const apiGetCurrentUser = () =>
-// 	instance(
-// 		{ url: '/user', method: 'get' },
-// 		{
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 			},
-// 		},
-// 	);
+export const apiGetCurrentUser = () =>
+	instance(
+		{ url: '/user', method: 'get' },
+		{
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		},
+	);
 
-export const apiGetCurrentUser = () => {
+export const logout = () => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			const response = await fetch('http://localhost:5000/api/v1/user', {
-				method: 'GET',
+			const response = await fetch('http://localhost:5000/api/v1/user/logout', {
+				method: 'POST',
 				credentials: 'include',
 				headers: {
 					'Content-Type': 'application/json',
@@ -43,20 +43,19 @@ export const apiGetCurrentUser = () => {
 		}
 	});
 };
-
-export const logout = (data) =>
-	instance(
-		{
-			url: '/user/logout',
-			method: 'post',
-			data,
-		},
-		{
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		},
-	);
+// instance(
+// 	{
+// 		url: '/user/logout',
+// 		method: 'post',
+// 		data,
+// 	},
+// 	{
+// 		headers: {
+// 			'Content-Type': 'application/json',
+// 		},
+// 		withCredentials: true,
+// 	},
+// );
 
 export const apiRegister = (data) => {
 	return new Promise(async (resolve, reject) => {

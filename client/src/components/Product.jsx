@@ -1,29 +1,30 @@
-import React, { useState } from 'react';
-import { formatMoney, generateStar } from '../utils/helper';
+import React, { useState } from 'react'
+import { formatMoney, generateStar } from '../utils/helper'
 
-import newLabel from '../assets/new.png';
-import tredingLabel from '../assets/trending.png';
-import icons from '../utils/icon';
-import Option from './Option';
-import { Link } from 'react-router-dom';
-import path from '../utils/path';
+import newLabel from '../assets/new.png'
+import tredingLabel from '../assets/trending.png'
+import icons from '../utils/icon'
+import Option from './Option'
+import { Link } from 'react-router-dom'
 
 const Product = ({ productData, isNew, isTrending, isDescription }) => {
-	const [isHoverImage, setIsHoverImage] = useState(false);
+	const [isHoverImage, setIsHoverImage] = useState(false)
 	return (
 		<div className='w-full px-[10px] mb-4'>
 			<Link
-				to={`/${path.DETAIL_PRODUCTS}/${productData?._id}/${productData?.title}`}
+				to={`/${productData?.category?.toLowerCase()}/${productData?._id}/${
+					productData?.title
+				}`}
 				className={`w-full border block ${
 					isDescription ? 'h-[485px]' : 'h-[385px]'
 				}flex flex-col items-center justify-between gap-4 hover:shadow-md transition-all`}
 				onMouseEnter={(e) => {
-					e.stopPropagation();
-					setIsHoverImage(true);
+					e.stopPropagation()
+					setIsHoverImage(true)
 				}}
 				onMouseLeave={(e) => {
-					e.stopPropagation();
-					setIsHoverImage(false);
+					e.stopPropagation()
+					setIsHoverImage(false)
 				}}
 			>
 				<div className='w-full p-3 relative'>
@@ -35,11 +36,11 @@ const Product = ({ productData, isNew, isTrending, isDescription }) => {
 						</div>
 					)}
 					{isHoverImage && isDescription && (
-						<div className='absolute bottom-[-20px] font-normal left-0 text-gray-100 right-0 top-0 px-[50px] pt-[50px] animate-slide-top z-10 bg-[rgba(0,0,0,0.6)] flex flex-col gap-1 justify-start '>
+						<ul className='absolute bottom-[-20px] font-normal left-0 text-white right-0 top-0 px-[50px] pt-[50px] animate-slide-top z-10 bg-[rgba(0,0,0,0.3)] flex flex-col gap-1 justify-start '>
 							{productData?.description.map((el) => (
-								<span key={crypto.randomUUID()}>{el}</span>
+								<li key={crypto.randomUUID()}>{el}</li>
 							))}
-						</div>
+						</ul>
 					)}
 					<img
 						src={
@@ -76,20 +77,20 @@ const Product = ({ productData, isNew, isTrending, isDescription }) => {
 							if (el)
 								return (
 									<icons.AiFillStar color='orange' key={crypto.randomUUID()} />
-								);
+								)
 							return (
 								<icons.AiOutlineStar color='orange' key={crypto.randomUUID()} />
-							);
+							)
 						})}
 					</span>
 					<span className='capitalize line-clamp-1'>
-						{productData?.title.toLowerCase()}
+						{productData?.title?.toLowerCase()}
 					</span>
 					<span>{formatMoney(productData?.price)}</span>
 				</div>
 			</Link>
 		</div>
-	);
-};
+	)
+}
 
-export default Product;
+export default Product

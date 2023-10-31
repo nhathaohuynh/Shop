@@ -25,7 +25,6 @@ router.post(
 	asyncHandler(AccessController.signUp),
 );
 
-
 router.get(
 	'/user/authen-register/:token',
 	asyncHandler(AccessController.authenRegister),
@@ -37,7 +36,7 @@ router.post(
 	asyncHandler(AccessController.login),
 );
 
-router.get('/user', asyncHandler(AccessController.getUser));
+router.get('/user', verifyToken, asyncHandler(AccessController.getUser));
 
 router.post(
 	'/user/refresh-token',
@@ -45,7 +44,7 @@ router.post(
 	asyncHandler(AccessController.refreshToken),
 );
 
-router.post('/shop/logout', verifyToken, asyncHandler(AccessController.logout));
+router.post('/user/logout', verifyRefreshToken, asyncHandler(AccessController.logout));
 
 router.post(
 	'/user/change-password',

@@ -1,10 +1,10 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import icons from '../utils/icon';
+import React from 'react'
+import { useSelector } from 'react-redux'
+import icons from '../utils/icon'
 
 function HotCollection() {
-	const { categories: cateProduct } = useSelector((state) => state?.app);
-	const cateProductBrand = cateProduct?.filter((el) => el.brand.length !== 0);
+	const { categories: cateProduct } = useSelector((state) => state?.app)
+	const cateProductBrand = cateProduct?.filter((el) => el.brand.length !== 0)
 	return (
 		<div className='w-full'>
 			<div className='flex justify-between items-center border-main border-b-2'>
@@ -22,7 +22,9 @@ function HotCollection() {
 								className='flex-1 w-[144px] h-[129px] object-contain'
 							/>
 							<div className='flex-1 flex flex-col justify-start'>
-								<h5 className='text-[16px] text-[#333] mb-1 uppercase'>{el.title}</h5>
+								<h5 className='text-[16px] text-[#333] mb-1 uppercase'>
+									{el.title}
+								</h5>
 								<ul className='flex flex-col gap-1 justify-start '>
 									{el?.brand?.map((brand) => (
 										<li
@@ -36,11 +38,11 @@ function HotCollection() {
 								</ul>
 							</div>
 						</div>
-					);
+					)
 				})}
 			</div>
 		</div>
-	);
+	)
 }
 
-export default HotCollection;
+export default HotCollection

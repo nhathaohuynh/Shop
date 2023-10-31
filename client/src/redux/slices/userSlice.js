@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getCurrentUser } from '../actions/userAction';
+import { logout } from '../actions/userAction';
 
 const userReducer = createSlice({
 	name: 'user',
@@ -19,16 +19,16 @@ const userReducer = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
-		builder.addCase(getCurrentUser.pending, (state) => {
+		builder.addCase(logout.pending, (state) => {
 			state.loading = true;
 		});
-		builder.addCase(getCurrentUser.fulfilled, (state, action) => {
-			state.loading = false;
-			state.currentUser = action.payload;
-		});
-		builder.addCase(getCurrentUser.rejected, (state) => {
+		builder.addCase(logout.fulfilled, (state, action) => {
 			state.loading = false;
 			state.currentUser = null;
+			state.isLogin = false;
+		});
+		builder.addCase(logout.rejected, (state) => {
+			state.loading = false;
 		});
 	},
 });

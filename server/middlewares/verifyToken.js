@@ -30,7 +30,7 @@ const verifyRefreshToken = asyncHandler(async (req, res, next) => {
 	const refreshToken = req?.cookies?.refreshToken;
 
 	if (!refreshToken) {
-		return next(new Forbidden('Provide refresh token please !!'));
+		return next(new Forbidden('Forbidden'));
 	}
 
 	jwt.verify(refreshToken, JWT_KEY, async (err, decoded) => {
@@ -46,7 +46,6 @@ const verifyRefreshToken = asyncHandler(async (req, res, next) => {
 		const isMatchRefreshToken = refreshToken === foundUser.refreshToken;
 		if (!isMatchRefreshToken)
 			return next(new BadRequest('Invalid refresh token'));
-
 		req.user = foundUser;
 		next();
 	});

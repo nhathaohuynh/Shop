@@ -1,22 +1,18 @@
-import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import path from '../utils/path';
-import { useDispatch, useSelector } from 'react-redux';
-import { getCurrentUser } from '../redux/actions/userAction';
-import icons from '../utils/icon';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { logout } from '../redux/actions/userAction'
+import icons from '../utils/icon'
+import path from '../utils/path'
 
 function SubHeader() {
-	const dispatch = useDispatch();
-	const { isLogin, currentUser } = useSelector((state) => state.user);
-	useEffect(() => {
-		if (isLogin) dispatch(getCurrentUser());
-	}, [dispatch]);
+	const dispatch = useDispatch()
+	const { currentUser } = useSelector((state) => state?.user)
 
-	console.log(currentUser);
 	return (
 		<div className='h-[50px] w-full bg-main flex justify-center items-center'>
 			<div className='w-main flex justify-between items-center text-white text-sm gap-20'>
-				<div className='flex items-center text-[12px]'>
+				<div className='flex items-center text-[14px]'>
 					<span>ORDER ONLINE OR CALL US (+8400) 300 8808</span>
 					<span className='bg-[rgba(255,255,255,0.3)] w-[1px] h-[16px] inline-block mx-2'></span>
 					<span>VND</span>
@@ -32,14 +28,14 @@ function SubHeader() {
 						<input
 							type='search'
 							id='search-input'
-							className='block w-full p-2.5 pl-3 text-xs outline-none bg-white placeholder-gray-700 text-gray-700'
+							className='block w-full p-2.5 pl-3 text-xs outline-none text-[14px] font-normal bg-white placeholder-gray-700 text-gray-700'
 							placeholder='Search products ...'
 							required
 							spellCheck='false'
 						/>
 						<button
 							type='submit'
-							className='text-white text-[12px] absolute right-0 bottom-0 top-0 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-300 font-medium px-4 py-2 '
+							className='text-white text-[12px] absolute right-0 bottom-0 top-0 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-blue-300 font-normal px-4 py-2 '
 						>
 							Search
 						</button>
@@ -47,10 +43,16 @@ function SubHeader() {
 				</div>
 				{currentUser ? (
 					<div className='flex items-center gap-2'>
-						<span className='text-[12px]'>
+						<span className='text-[14px]'>
 							Welcome! {currentUser?.username}
 						</span>
-						<icons.AiOutlineLogout size={16} className='hover:cursor-pointer' />
+						<icons.AiOutlineLogout
+							size={20}
+							className='hover:cursor-pointer'
+							onClick={() => {
+								dispatch(logout())
+							}}
+						/>
 					</div>
 				) : (
 					<div>
@@ -65,13 +67,13 @@ function SubHeader() {
 							className='hover:underline hover:text-gray-100'
 							to={path.REGISTER}
 						>
-							Create Account
+							Register
 						</Link>
 					</div>
 				)}
 			</div>
 		</div>
-	);
+	)
 }
 
-export default SubHeader;
+export default SubHeader

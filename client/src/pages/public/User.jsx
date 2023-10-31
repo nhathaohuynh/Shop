@@ -1,25 +1,33 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Footer, Header, Navigation, SubHeader } from '../../components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getCategories } from '../../redux/actions/appAction';
+import Loading from '../../components/Loading';
 const User = () => {
 	const dispatch = useDispatch();
+	const { loading } = useSelector((state) => state?.user);
 	useEffect(() => {
 		dispatch(getCategories());
 	}, []);
 
 	return (
-		<div className='w-full flex items-center flex-col'>
-			<SubHeader />
-			<Header />
-			<Navigation />
-			<div className='w-main font-medium'>
-				<Outlet />
-			</div>
-			<Footer/>
-		</div>
+		<>
+			{loading ? (
+				<Loading />
+			) : (
+				<main className='w-full flex items-center flex-col'>
+					<SubHeader />
+					<Header />
+					<Navigation />
+					<div className='w-full font-medium'>
+						<Outlet />
+					</div>
+					<Footer />
+				</main>
+			)}
+		</>
 	);
 };
 
